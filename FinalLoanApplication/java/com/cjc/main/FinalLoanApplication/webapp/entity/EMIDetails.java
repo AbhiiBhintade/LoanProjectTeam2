@@ -13,17 +13,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users {
+public class EMIDetails {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int userId;
-	private String userName;
-	private String passWord;
-	private String email;
-	private String userType;
-	private String name;
-	private byte[] profilephoto;
-	
-	
+	private int emiID;
+	private double emiAmountMonthly;
+	private String nextEmiDueDate;
+	private String previousEmiStatus;
+
+
 }

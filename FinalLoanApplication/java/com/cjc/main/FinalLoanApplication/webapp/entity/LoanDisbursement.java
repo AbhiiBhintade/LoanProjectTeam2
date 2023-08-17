@@ -13,17 +13,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users {
+public class LoanDisbursement {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int userId;
-	private String userName;
-	private String passWord;
-	private String email;
-	private String userType;
-	private String name;
-	private byte[] profilephoto;
-	
-	
+	private int agreementId;
+	private int loanNo;
+	private String agreementDate;
+	private double totalAmount;
+	private String bankName;
+	private long accountNumber;
+	private double transferAmount;
+	private String paymentStatus;
+	private String amountPaidDate;
+
+
 }

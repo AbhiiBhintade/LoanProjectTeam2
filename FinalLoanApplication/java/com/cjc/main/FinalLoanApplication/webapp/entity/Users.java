@@ -22,8 +22,6 @@ public class Users {
 	private String passWord;
 	private String email;
 	private String userType;
-	private String name;
-	private byte[] profilephoto;
 	
 	
 }

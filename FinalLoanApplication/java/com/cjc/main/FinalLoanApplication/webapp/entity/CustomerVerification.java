@@ -13,17 +13,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users {
+public class CustomerVerification {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int userId;
-	private String userName;
-	private String passWord;
-	private String email;
-	private String userType;
-	private String name;
-	private byte[] profilephoto;
-	
-	
+	private int verificationID;
+	private String verificationDate;
+	private String status;
+	private String remarks;
+
 }

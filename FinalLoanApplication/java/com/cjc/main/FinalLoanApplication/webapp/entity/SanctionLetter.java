@@ -9,21 +9,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users {
+public class SanctionLetter {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int userId;
-	private String userName;
-	private String passWord;
-	private String email;
-	private String userType;
-	private String name;
-	private byte[] profilephoto;
-	
-	
+	private int sanctionId;
+	private String sanctionDate;
+	private String applicantName;
+	private double contactDetails;
+	private double loanAmtSanctioned;
+	private int rateOfInterest;
+	private int loanTenure;
+	private double monthlyEmiAmount;
+	private String sanctionStatus;
+
+
 }

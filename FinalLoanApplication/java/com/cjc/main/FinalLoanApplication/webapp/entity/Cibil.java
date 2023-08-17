@@ -13,17 +13,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users {
+public class Cibil {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int userId;
-	private String userName;
-	private String passWord;
-	private String email;
-	private String userType;
-	private String name;
-	private byte[] profilephoto;
-	
-	
+	private int cibilId;
+	private int	cibilScore;
+	private String cibilScoreDateTime;
+	private String cibilStatus;
+	private String cibilRemark;
+
+
 }
