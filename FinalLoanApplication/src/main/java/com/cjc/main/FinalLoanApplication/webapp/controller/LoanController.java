@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cjc.main.FinalLoanApplication.webapp.entity.BaseResponse;
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
+import com.cjc.main.FinalLoanApplication.webapp.entity.MailDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
 import com.cjc.main.FinalLoanApplication.webapp.loanservice.LoanService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -69,6 +71,16 @@ public class LoanController {
     	  
     	  return new ResponseEntity<BaseResponse<EnquiryDetails>>(new BaseResponse<EnquiryDetails>(200, "ENQUIRY ADDED"
     			  									, new Date(), ed),HttpStatus.CREATED);
+      }
+      
+      @RequestMapping("/sendMail")
+      public ResponseEntity<BaseResponse<MailDetails>> sendmail(@RequestBody MailDetails md)
+      {
+    	  
+    	  ls.sendMail(md);
+		return new ResponseEntity<BaseResponse<MailDetails>>
+		(new BaseResponse<MailDetails>(200,"MAIL SEND",new Date(),null),HttpStatus.OK);
+    	  
       }
 	
 }

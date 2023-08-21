@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
+import com.cjc.main.FinalLoanApplication.webapp.entity.MailDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.LoanRepositoryForUsers;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.RepoForEnquiry;
@@ -21,6 +25,13 @@ public class LoanServiceImpl implements LoanService {
 	
 	@Autowired
 	RepoForEnquiry re;
+	
+	@Value("${spring.mail.username}")
+	private String fromMail;
+	
+	
+	@Autowired
+	private JavaMailSender sender;
 	
 	
 	  @Autowired
@@ -58,6 +69,21 @@ public class LoanServiceImpl implements LoanService {
 	public EnquiryDetails addenquiry(EnquiryDetails e) {
 		
 		return 	re.save(e);
+	}
+
+
+	@Override
+	public void sendMail(MailDetails md) {
+		
+		SimpleMailMessage sm=new SimpleMailMessage();
+		sm.setFrom(fromMail);
+		sm.setTo(md.getToMail());
+		sm.setText(md.getText());
+		sm.setSubject(md.getSubject());
+		
+		sender.send(sm);
+		
+		
 	}
 
 }
