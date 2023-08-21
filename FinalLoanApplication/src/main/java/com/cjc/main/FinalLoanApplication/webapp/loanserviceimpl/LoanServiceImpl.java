@@ -42,9 +42,21 @@ public class LoanServiceImpl implements LoanService {
 	public Users adduser(Users u, MultipartFile profilephoto) {
 		
 		try {
+			
+			SimpleMailMessage sm=new SimpleMailMessage();
 			u.setProfilephoto(profilephoto.getBytes());
 			u.setUserName(u.getName()+""+u.getUserType()+"@"+rd.nextInt(7777));
 			u.setPassWord(u.getUserType()+"@"+rd.nextInt(7777));
+			
+			sm.setFrom(fromMail);
+			sm.setTo(u.getEmail());
+			sm.setSubject("YOUR USERNAME AND PASSWORD");
+			sm.setText("YOUR USERNAME IS:-"+u.getUserName()+
+					"YOUR PASSWORD IS:-"+u.getPassWord());
+			
+			
+			
+			sender.send(sm);
 			
 			return lr.save(u);
 		} catch (IOException e) {
@@ -72,18 +84,18 @@ public class LoanServiceImpl implements LoanService {
 	}
 
 
-	@Override
-	public void sendMail(MailDetails md) {
-		
-		SimpleMailMessage sm=new SimpleMailMessage();
-		sm.setFrom(fromMail);
-		sm.setTo(md.getToMail());
-		sm.setText(md.getText());
-		sm.setSubject(md.getSubject());
-		
-		sender.send(sm);
-		
-		
-	}
+//	@Override
+//	public void sendMail(MailDetails md) {
+//		
+//		
+//		sm.setFrom(fromMail);
+//		sm.setTo(md.getToMail());
+//		sm.setText(md.getText());
+//		sm.setSubject(md.getSubject());
+//		
+//		sender.send(sm);
+//		
+//		
+	
 
 }

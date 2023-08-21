@@ -14,6 +14,4 @@ public interface LoanService {
 
 	EnquiryDetails addenquiry(EnquiryDetails e);
 
-	void sendMail(MailDetails md);
-
 }

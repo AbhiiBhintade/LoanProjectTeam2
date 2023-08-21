@@ -73,14 +73,6 @@ public class LoanController {
     			  									, new Date(), ed),HttpStatus.CREATED);
       }
       
-      @RequestMapping("/sendMail")
-      public ResponseEntity<BaseResponse<MailDetails>> sendmail(@RequestBody MailDetails md)
-      {
-    	  
-    	  ls.sendMail(md);
-		return new ResponseEntity<BaseResponse<MailDetails>>
-		(new BaseResponse<MailDetails>(200,"MAIL SEND",new Date(),null),HttpStatus.OK);
-    	  
-      }
+ 
 	
 }
