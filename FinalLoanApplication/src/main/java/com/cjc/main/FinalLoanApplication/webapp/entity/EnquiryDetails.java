@@ -27,7 +27,7 @@ public class EnquiryDetails {
 	private int age;
 	private String email;
 	private Double mobileNumber;
-	private Double pancardNumber;
+	private String pancardNumber;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cibil cibil;
 

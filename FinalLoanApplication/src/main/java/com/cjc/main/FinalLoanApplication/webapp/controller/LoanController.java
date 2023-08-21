@@ -5,7 +5,11 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
+@CrossOrigin("*")
 public class LoanController {
 
 	
@@ -41,14 +46,29 @@ public class LoanController {
 	
 	
 	
-	@PostMapping("/addenquiry")
-	public ResponseEntity<BaseResponse<EnquiryDetails>> addenquiry(
-			                                                 )
-	{
-		
-		
-		
-		return null;
-	}
+      @GetMapping("/getuserdata/{userName}/{passWord}")
+      public ResponseEntity<BaseResponse<Users>>getuserdata(@PathVariable("userName") String userName,
+    		                                                @PathVariable ("passWord") String passWord)
+      {
+    	  
+    	  
+    	 Users ud= ls.getuserdata(userName,passWord);
+    	 System.out.println(ud.getUserType());
+    	  return new ResponseEntity<BaseResponse<Users>>(new BaseResponse<Users>(200, "USER FOUND",
+    			                                         new Date(), ud),HttpStatus.FOUND);
+      }
+     
+      
+//      FOR ENQUIRY POST
+      
+      @PostMapping("/addenquiry")
+      public ResponseEntity<BaseResponse<EnquiryDetails>>addenquiry(@RequestBody EnquiryDetails e)
+      {
+    	  
+    	  EnquiryDetails ed =ls.addenquiry(e);
+    	  
+    	  return new ResponseEntity<BaseResponse<EnquiryDetails>>(new BaseResponse<EnquiryDetails>(200, "ENQUIRY ADDED"
+    			  									, new Date(), ed),HttpStatus.CREATED);
+      }
 	
 }

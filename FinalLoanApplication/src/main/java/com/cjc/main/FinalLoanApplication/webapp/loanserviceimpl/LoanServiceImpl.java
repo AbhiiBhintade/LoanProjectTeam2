@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.LoanRepositoryForUsers;
+import com.cjc.main.FinalLoanApplication.webapp.loanRepo.RepoForEnquiry;
 import com.cjc.main.FinalLoanApplication.webapp.loanservice.LoanService;
 
 @Service
@@ -17,8 +19,12 @@ public class LoanServiceImpl implements LoanService {
 	@Autowired
 	LoanRepositoryForUsers lr;
 	
+	@Autowired
+	RepoForEnquiry re;
 	
-	Random rd=new Random(7777);
+	
+	  @Autowired
+	  private Random rd;
 	
 	
 	@Override
@@ -36,6 +42,22 @@ public class LoanServiceImpl implements LoanService {
 		}
 		
 		return null;
+	}
+
+
+	@Override
+	public Users getuserdata(String userName, String passWord) {
+		
+		Users users = lr.findAllByUserNameAndPassWord(userName, passWord);
+		
+		return users;
+	}
+
+
+	@Override
+	public EnquiryDetails addenquiry(EnquiryDetails e) {
+		
+		return 	re.save(e);
 	}
 
 }
