@@ -55,7 +55,7 @@ public class LoanController {
     	 Users ud= ls.getuserdata(userName,passWord);
     	 System.out.println(ud.getUserType());
     	  return new ResponseEntity<BaseResponse<Users>>(new BaseResponse<Users>(200, "USER FOUND",
-    			                                         new Date(), ud),HttpStatus.FOUND);
+    			                                         new Date(), ud),HttpStatus.OK);
       }
      
       
