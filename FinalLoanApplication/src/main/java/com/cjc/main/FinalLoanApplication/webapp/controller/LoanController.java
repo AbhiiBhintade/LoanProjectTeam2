@@ -31,7 +31,7 @@ public class LoanController {
 	@Autowired
 	LoanService ls;
 	
-	//for adding user throgh admin
+	//for adding user through admin
 	
 	@PostMapping("/adduser")
 	public ResponseEntity<BaseResponse<Users>> adduser(@RequestPart("data") String usersjson,
