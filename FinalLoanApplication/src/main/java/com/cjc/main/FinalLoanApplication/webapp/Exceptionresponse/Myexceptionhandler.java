@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.cjc.main.FinalLoanApplication.webapp.entity.BaseResponse;
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
-import com.cjc.main.exceptions.EnquiryNotFound;
-import com.cjc.main.exceptions.MailIdNotFound;
-import com.cjc.main.exceptions.NullPointer;
-import com.cjc.main.exceptions.UserNotFound;
+import com.cjc.main.FinalLoanApplication.webapp.exceptions.EnquiryNotFound;
+import com.cjc.main.FinalLoanApplication.webapp.exceptions.MailIdNotFound;
+import com.cjc.main.FinalLoanApplication.webapp.exceptions.NullPointer;
+import com.cjc.main.FinalLoanApplication.webapp.exceptions.UserNotFound;
 
 @RestControllerAdvice
 public class Myexceptionhandler {

@@ -1,4 +1,4 @@
-package com.cjc.main.exceptions;
+package com.cjc.main.FinalLoanApplication.webapp.exceptions;
 
 
 public class EnquiryNotFound extends Exception{
