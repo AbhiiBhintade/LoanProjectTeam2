@@ -112,8 +112,7 @@ public class LoanController {
      }
      
      @PutMapping("/updatestatus/{eid}")
-     public ResponseEntity<BaseResponse<EnquiryDetails>>updatestatus(@PathVariable int eid
-    		 														)
+     public ResponseEntity<BaseResponse<EnquiryDetails>>updatestatus(@PathVariable int eid)
      {
     	 System.out.println(eid);
     	 EnquiryDetails e=ls.updatestatus(eid);
