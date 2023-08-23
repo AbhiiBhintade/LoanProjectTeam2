@@ -16,6 +16,7 @@ public interface LoanService {
 
 	EnquiryDetails addenquiry(EnquiryDetails e);
 
+
 	Iterable<EnquiryDetails> getenquiry(String enquirystatus1,String enquirystatus2);
 
 	List<Users> getallusers();
@@ -23,5 +24,6 @@ public interface LoanService {
 	void deleteusers( int userId);
 
 	EnquiryDetails updatestatus(int eid);
+
 
 }

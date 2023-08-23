@@ -89,6 +89,7 @@ public class LoanServiceImpl implements LoanService {
 	}
 
 
+
 	@Override
 	public Iterable<EnquiryDetails> getenquiry(String enquirystatus1,String enquirystatus2) {
 		
@@ -133,6 +134,23 @@ public class LoanServiceImpl implements LoanService {
 
 
 	
-	
+
+//	@Override
+//	public void sendMail(MailDetails md) {
+//		
+//		
+//		sm.setFrom(fromMail);
+//		sm.setTo(md.getToMail());
+//		sm.setText(md.getText());
+//		sm.setSubject(md.getSubject());
+//		
+//		sender.send(sm);
+//		
+//		
+	public void m1()
+	{
+		System.out.println("dev 2");
+	}
+
 
 }
