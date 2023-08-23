@@ -147,10 +147,7 @@ public class LoanServiceImpl implements LoanService {
 //		sender.send(sm);
 //		
 //		
-	public void m1()
-	{
-		System.out.println("dev 2");
-	}
+	
 
 
 }
