@@ -120,5 +120,16 @@ public class LoanController {
     	 return new ResponseEntity<BaseResponse<EnquiryDetails>>(new BaseResponse<EnquiryDetails>(200, "ENQUIRY SEND OE",
     			                 new Date(), e),HttpStatus.OK);		
      }
-	
+     
+     @GetMapping("/getsingleuser/{userType}")
+     public ResponseEntity<BaseResponse<Users>>getsingle(@PathVariable String userType)
+     {
+
+
+    	 	Users ud= ls.getsingleuser(userType);
+
+    	 	return new ResponseEntity<BaseResponse<Users>>(new BaseResponse<Users>(200, "USER FOUND",
+    	 			new Date(), ud),HttpStatus.OK);
+	}
+
 }

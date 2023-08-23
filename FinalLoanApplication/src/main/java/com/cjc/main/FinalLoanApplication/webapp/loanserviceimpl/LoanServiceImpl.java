@@ -132,6 +132,15 @@ public class LoanServiceImpl implements LoanService {
 	}
 
 
+	@Override
+	public Users getsingleuser(String userType) {
+
+			Users users = lr.findAllByUserType(userType);
+		
+		return users;
+	}
+
+
 	
 	
 

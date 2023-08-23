@@ -24,4 +24,6 @@ public interface LoanService {
 
 	EnquiryDetails updatestatus(int eid);
 
+	Users getsingleuser(String userType);
+
 }
