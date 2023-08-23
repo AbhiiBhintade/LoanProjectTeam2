@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
 
-@Repository
+
 public interface RepoForEnquiry extends JpaRepository<EnquiryDetails, Integer> {
+
+	Iterable<EnquiryDetails> findAllByEnquiryStatusOrEnquiryStatus(String enquirystatus1, String enquirystatus2);
+	EnquiryDetails findByEid(int eid);
 
 }
