@@ -1,14 +1,17 @@
 package com.cjc.main.FinalLoanApplication.webapp.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,6 +26,9 @@ import com.cjc.main.FinalLoanApplication.webapp.loanservice.LoanService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Delegate;
+
 
 @RestController
 @CrossOrigin("*")
@@ -55,7 +61,7 @@ public class LoanController {
     	  
     	  
     	 Users ud= ls.getuserdata(userName,passWord);
-    	 System.out.println(ud.getUserType());
+    	
     	  return new ResponseEntity<BaseResponse<Users>>(new BaseResponse<Users>(200, "USER FOUND",
     			                                         new Date(), ud),HttpStatus.OK);
       }
@@ -73,6 +79,46 @@ public class LoanController {
     			  									, new Date(), ed),HttpStatus.CREATED);
       }
       
+     @GetMapping("/getenq/{enquirystatus1}/{enquirystatus2}") 
+     public ResponseEntity<BaseResponse<Iterable<EnquiryDetails>>>getenq(
+    		 										@PathVariable String enquirystatus1,
+    		 										@PathVariable String enquirystatus2)
+     {
+    	 
+    	Iterable<EnquiryDetails> it=ls.getenquiry(enquirystatus1,enquirystatus2);
+    	 
+    	 return new ResponseEntity<BaseResponse<Iterable<EnquiryDetails>>>(new BaseResponse<Iterable<EnquiryDetails>>(200, "ENQUIRY FOUND"
+					, new Date(), it),HttpStatus.OK);
+     }
  
+     @GetMapping("/getallusers") 
+     public ResponseEntity<BaseResponse<List<Users>>>getallusers()
+    		 										
+     {
+    	 List<Users> users=ls.getallusers();
+
+    	 
+    	 return new ResponseEntity<BaseResponse<List<Users>>>(new BaseResponse<List<Users>>(200, "USERS FOUND"
+					, new Date(), users),HttpStatus.OK);
+     }
+    
+     @DeleteMapping("/deletuser/{userId}")
+     public ResponseEntity<BaseResponse<Users>>deleteuser(@PathVariable int userId)
+     {
+    	 ls.deleteusers(userId);
+    	 
+    	 return new ResponseEntity<BaseResponse<Users>>(new BaseResponse<Users>(200, "USER DELETED",
+    			                                        new Date(), null),HttpStatus.OK);		
+     }
+     
+     @PutMapping("/updatestatus/{eid}")
+     public ResponseEntity<BaseResponse<EnquiryDetails>>updatestatus(@PathVariable int eid)
+     {
+    	 System.out.println(eid);
+    	 EnquiryDetails e=ls.updatestatus(eid);
+    	 
+    	 return new ResponseEntity<BaseResponse<EnquiryDetails>>(new BaseResponse<EnquiryDetails>(200, "ENQUIRY SEND OE",
+    			                 new Date(), e),HttpStatus.OK);		
+     }
 	
 }

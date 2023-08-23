@@ -1,6 +1,8 @@
 package com.cjc.main.FinalLoanApplication.webapp.loanserviceimpl;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.MailDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
+import com.cjc.main.FinalLoanApplication.webapp.enums.Enquiry_Status;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.LoanRepositoryForUsers;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.RepoForEnquiry;
 import com.cjc.main.FinalLoanApplication.webapp.loanservice.LoanService;
@@ -80,22 +83,56 @@ public class LoanServiceImpl implements LoanService {
 	@Override
 	public EnquiryDetails addenquiry(EnquiryDetails e) {
 		
+		e.setEnquiryStatus(Enquiry_Status.CREATED.toString());
+		
 		return 	re.save(e);
 	}
 
 
-//	@Override
-//	public void sendMail(MailDetails md) {
-//		
-//		
-//		sm.setFrom(fromMail);
-//		sm.setTo(md.getToMail());
-//		sm.setText(md.getText());
-//		sm.setSubject(md.getSubject());
-//		
-//		sender.send(sm);
-//		
-//		
+	@Override
+	public Iterable<EnquiryDetails> getenquiry(String enquirystatus1,String enquirystatus2) {
+		
+		if(enquirystatus2.startsWith("no"))
+		{
+			
+			Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirystatus1,enquirystatus2);
+			
+			return all;
+		}
+		return null;
+		
+	}
+
+
+	@Override
+	public List<Users> getallusers() {
+		
+		List<Users>findAll=lr.findAll();
+		
+		return findAll;
+	}
+
+
+	@Override
+	public void deleteusers( int userId) {
+		
+		lr.deleteById(userId);
+		
+	}
+
+
+	@Override
+	public EnquiryDetails updatestatus(int eid) {
+			
+			EnquiryDetails e = re.findByEid(eid);
+			System.out.println(e);
+			e.setEnquiryStatus(Enquiry_Status.CIBIL_REQUIRED.toString());
+			re.save(e);
+			return e;
+	}
+
+
+	
 	
 
 }

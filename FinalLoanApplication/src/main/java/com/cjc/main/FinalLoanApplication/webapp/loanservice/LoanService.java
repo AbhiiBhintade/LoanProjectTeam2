@@ -1,5 +1,7 @@
 package com.cjc.main.FinalLoanApplication.webapp.loanservice;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
@@ -13,5 +15,13 @@ public interface LoanService {
 	Users getuserdata(String userName, String passWord);
 
 	EnquiryDetails addenquiry(EnquiryDetails e);
+
+	Iterable<EnquiryDetails> getenquiry(String enquirystatus1,String enquirystatus2);
+
+	List<Users> getallusers();
+
+	void deleteusers( int userId);
+
+	EnquiryDetails updatestatus(int eid);
 
 }
