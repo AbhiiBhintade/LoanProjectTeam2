@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cjc.main.FinalLoanApplication.webapp.entity.BaseResponse;
+import com.cjc.main.FinalLoanApplication.webapp.entity.Cibil;
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.MailDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
@@ -38,6 +40,9 @@ public class LoanController {
 	
 	@Autowired
 	LoanService ls;
+	
+	@Autowired
+	RestTemplate rt;
 	
 	//for adding user through admin
 	
@@ -132,4 +137,18 @@ public class LoanController {
     	 			new Date(), ud),HttpStatus.OK);
 	}
 
+     //get produce data of CIBIL;
+     
+    @GetMapping("/getcibil/{pancardNumber}")
+    public ResponseEntity<BaseResponse<Integer>>getcibil(@PathVariable String pancardNumber
+    													)
+    {
+    	String url="http://localhost:9092/getpancard/"+pancardNumber;
+    	int cibil = rt.getForObject(url,Integer.class);
+    	
+    	
+    	return new ResponseEntity<BaseResponse<Integer>>(new BaseResponse<Integer>(200, "CIBIL FOUND",
+    										new Date(),cibil),HttpStatus.OK);
+    }
+     
 }
