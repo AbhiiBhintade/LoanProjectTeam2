@@ -150,5 +150,20 @@ public class LoanController {
     	return new ResponseEntity<BaseResponse<Integer>>(new BaseResponse<Integer>(200, "CIBIL FOUND",
     										new Date(),cibil),HttpStatus.OK);
     }
+    
+	@PostMapping("/sendmailwithattachment")
+	public ResponseEntity<BaseResponse<MailDetails>>sendmailwithattachment(
+							@RequestPart("attach") MultipartFile attachment,
+							@RequestPart("mail") String maildetailsJson) throws JsonMappingException, JsonProcessingException
+	{
+		ObjectMapper om=new ObjectMapper();
+		MailDetails mailDetails = om.readValue(maildetailsJson, MailDetails.class);
+		
+		String m = ls.sendmailwithattachment(mailDetails,attachment);
+		
+		
+		return new ResponseEntity<BaseResponse<MailDetails>>(new BaseResponse<MailDetails>(201
+				, "MAIL SEND SUCCESSFULLY", new Date(), null), HttpStatus.OK);
+	}
      
 }

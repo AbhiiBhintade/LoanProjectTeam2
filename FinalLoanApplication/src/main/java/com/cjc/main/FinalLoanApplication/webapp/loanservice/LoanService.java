@@ -28,5 +28,9 @@ public interface LoanService {
 
 	Users getsingleuser(String userType);
 
+	String sendmailwithattachment(MailDetails mailDetails, MultipartFile attachment);
+
+
+
 
 }

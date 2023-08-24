@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.activation.FileTypeMap;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -136,11 +141,37 @@ public class LoanServiceImpl implements LoanService {
 	@Override
 	public EnquiryDetails updatestatus(int eid) {
 			
+		System.out.println("in service update");
 			EnquiryDetails e = re.findByEid(eid);
-			System.out.println(e);
-			e.setEnquiryStatus(Enquiry_Status.CIBIL_REQUIRED.toString());
-			re.save(e);
-			return e;
+			
+			String enquiryStatus = e.getEnquiryStatus();
+			if(enquiryStatus.equals("CREATED"))
+			{
+				
+				e.setEnquiryStatus(Enquiry_Status.CIBIL_REQUIRED.toString());
+				re.save(e);
+				return e;
+			}else if(enquiryStatus.equals("CIBIL_REQUIRED"))
+			{
+				
+				e.setEnquiryStatus(Enquiry_Status.CIBIL_CHECKED.toString());
+				re.save(e);
+				return e;
+			}
+			else if (enquiryStatus.equals("CIBIL_CHECKED")) {
+				if(e.getCibil().getCibilScore()>650)
+				{
+					e.setEnquiryStatus(Enquiry_Status.APPROVED.toString());
+					re.save(e);
+					return e;
+				}else {
+					e.setEnquiryStatus(Enquiry_Status.REJECTED.toString());
+					re.save(e);
+					return e;
+				}
+				
+			}
+			return null;
 	}
 
 
@@ -151,6 +182,32 @@ public class LoanServiceImpl implements LoanService {
 		
 		return users;
 	}
+
+
+	@Override
+	public String sendmailwithattachment(MailDetails mailDetails, MultipartFile attachment) {
+		MimeMessage mm = sender.createMimeMessage();
+		
+		try {
+			MimeMessageHelper mmh=new MimeMessageHelper(mm, true);
+			mmh.setFrom(fromMail);
+			mmh.setTo(mailDetails.getToMail());
+			mmh.setSubject(mailDetails.getSubject());
+			mmh.setText(mailDetails.getText());
+			
+			
+			sender.send(mm);
+			
+			return "mail send";
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "mail not send";
+		}
+	}
+
+
+
 	
 	
 
