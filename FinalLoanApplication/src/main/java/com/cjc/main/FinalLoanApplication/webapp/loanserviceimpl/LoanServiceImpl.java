@@ -83,7 +83,18 @@ public class LoanServiceImpl implements LoanService {
 	@Override
 	public EnquiryDetails addenquiry(EnquiryDetails e) {
 		
+		SimpleMailMessage sm=new SimpleMailMessage();
+		
 		e.setEnquiryStatus(Enquiry_Status.CREATED.toString());
+		
+		
+		sm.setFrom(fromMail);
+		sm.setTo(e.getEmail());
+		sm.setSubject("RESPONSE TO YOUR LOAN ENQUIRY");
+		sm.setText("YOUR ENQUIRY HAS BEEN RECEIVED. "
+				+ "WE WILL UPDATE YOU SOON.");
+		
+		sender.send(sm);
 		
 		return 	re.save(e);
 	}
@@ -144,18 +155,7 @@ public class LoanServiceImpl implements LoanService {
 
 	
 
-//	@Override
-//	public void sendMail(MailDetails md) {
-//		
-//		
-//		sm.setFrom(fromMail);
-//		sm.setTo(md.getToMail());
-//		sm.setText(md.getText());
-//		sm.setSubject(md.getSubject());
-//		
-//		sender.send(sm);
-//		
-//		
+	
 	
 
 
