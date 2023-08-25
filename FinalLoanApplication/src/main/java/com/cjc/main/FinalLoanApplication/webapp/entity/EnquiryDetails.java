@@ -31,8 +31,9 @@ public class EnquiryDetails {
 	private Double mobileNumber;
 	private String pancardNumber;
 	private String enquiryStatus;
+	private String caseid;
 	@OneToOne(cascade = CascadeType.ALL)
-	private Cibil cibil;
+	private Cibil cibil=new Cibil();
 
 
 }

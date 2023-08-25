@@ -1,6 +1,7 @@
 package com.cjc.main.FinalLoanApplication.webapp.loanserviceimpl;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -17,9 +18,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cjc.main.FinalLoanApplication.webapp.entity.Cibil;
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.MailDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
+import com.cjc.main.FinalLoanApplication.webapp.enums.Cibil_Status;
 import com.cjc.main.FinalLoanApplication.webapp.enums.Enquiry_Status;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.LoanRepositoryForUsers;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.RepoForEnquiry;
@@ -91,13 +94,13 @@ public class LoanServiceImpl implements LoanService {
 		SimpleMailMessage sm=new SimpleMailMessage();
 		
 		e.setEnquiryStatus(Enquiry_Status.CREATED.toString());
-		
+		e.setCaseid("CD"+rd.nextInt(8888)+rd.nextInt(9999));
 		
 		sm.setFrom(fromMail);
 		sm.setTo(e.getEmail());
 		sm.setSubject("RESPONSE TO YOUR LOAN ENQUIRY");
 		sm.setText("YOUR ENQUIRY HAS BEEN RECEIVED. "
-				+ "WE WILL UPDATE YOU SOON.");
+				+ "WE WILL UPDATE YOU SOON."+"YOUR CASEID IS:-"+e.getCaseid());
 		
 		sender.send(sm);
 		
@@ -116,7 +119,12 @@ public class LoanServiceImpl implements LoanService {
 			
 			return all;
 		}
-		return null;
+		else {
+Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirystatus1,enquirystatus2);
+			
+			return all;
+		}
+		
 		
 	}
 
@@ -139,26 +147,55 @@ public class LoanServiceImpl implements LoanService {
 
 
 	@Override
-	public EnquiryDetails updatestatus(int eid) {
+	public EnquiryDetails updatestatus(int eid,EnquiryDetails ed) {
 			
 		System.out.println("in service update");
 			EnquiryDetails e = re.findByEid(eid);
-			
+			if(e.getCibil()==null)
+			{
+				e.setCibil(new Cibil());
+			}
 			String enquiryStatus = e.getEnquiryStatus();
 			if(enquiryStatus.equals("CREATED"))
 			{
 				
 				e.setEnquiryStatus(Enquiry_Status.CIBIL_REQUIRED.toString());
+			
 				re.save(e);
 				return e;
 			}else if(enquiryStatus.equals("CIBIL_REQUIRED"))
 			{
 				
 				e.setEnquiryStatus(Enquiry_Status.CIBIL_CHECKED.toString());
-				re.save(e);
-				return e;
+				e.getCibil().setCibilScore(ed.getCibil().getCibilScore());;
+				if(e.getCibil().getCibilScore()<650)
+				{
+					e.getCibil().setCibilRemark("cibil score is low");
+					e.getCibil().setCibilStatus(Cibil_Status.LOW_CIBIL.toString());
+					e.getCibil().setCibilScoreDateTime(new Date().toString());
+					return re.save(e);
+				}
+				else if(e.getCibil().getCibilScore()<750 && e.getCibil().getCibilScore()>650)
+				{
+					e.getCibil().setCibilRemark("cibil score is good");
+					e.getCibil().setCibilStatus(Cibil_Status.AVRAGE_CIBIL.toString());
+					e.getCibil().setCibilScoreDateTime(new Date().toString());
+					return re.save(e);
+				}
+				else if(e.getCibil().getCibilScore()>750 && e.getCibil().getCibilScore()<900)
+				{
+					e.getCibil().setCibilRemark("cibil score is high");
+					e.getCibil().setCibilStatus(Cibil_Status.HIGH_CIBIL.toString());
+					e.getCibil().setCibilScoreDateTime(new Date().toString());
+					return re.save(e);
+				}else{
+					//throw CibilCoreNotApplicabelException
+					
+				}
+			
+		
 			}
-			else if (enquiryStatus.equals("CIBIL_CHECKED")) {
+			 if (enquiryStatus.equals("CIBIL_CHECKED")) {
 				if(e.getCibil().getCibilScore()>650)
 				{
 					e.setEnquiryStatus(Enquiry_Status.APPROVED.toString());

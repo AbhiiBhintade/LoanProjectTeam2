@@ -23,7 +23,7 @@ public interface LoanService {
 
 	void deleteusers( int userId);
 
-	EnquiryDetails updatestatus(int eid);
+	EnquiryDetails updatestatus(int eid,EnquiryDetails ed);
 
 
 	Users getsingleuser(String userType);

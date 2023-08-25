@@ -117,10 +117,11 @@ public class LoanController {
      }
      
      @PutMapping("/updatestatus/{eid}")
-     public ResponseEntity<BaseResponse<EnquiryDetails>>updatestatus(@PathVariable int eid)
+     public ResponseEntity<BaseResponse<EnquiryDetails>>updatestatus(@PathVariable int eid,
+    		 														@RequestBody EnquiryDetails ed)
      {
-    	 System.out.println(eid);
-    	 EnquiryDetails e=ls.updatestatus(eid);
+    	
+    	 EnquiryDetails e=ls.updatestatus(eid,ed);
     	 
     	 return new ResponseEntity<BaseResponse<EnquiryDetails>>(new BaseResponse<EnquiryDetails>(200, "ENQUIRY SEND OE",
     			                 new Date(), e),HttpStatus.OK);		
@@ -139,16 +140,19 @@ public class LoanController {
 
      //get produce data of CIBIL;
      
-    @GetMapping("/getcibil/{pancardNumber}")
-    public ResponseEntity<BaseResponse<Integer>>getcibil(@PathVariable String pancardNumber
-    													)
+    @PutMapping("/getcibil")
+    public ResponseEntity<BaseResponse<Integer>>getcibil(@RequestBody EnquiryDetails e)
     {
-    	String url="http://localhost:9092/getpancard/"+pancardNumber;
+    	e.setCibil(new Cibil());
+    	String url="http://localhost:9092/getpancard/"+e.getPancardNumber();
     	int cibil = rt.getForObject(url,Integer.class);
+              e.getCibil().setCibilScore(cibil);
+    	EnquiryDetails e2 = ls.updatestatus(e.getEid(),e);
+    	
     	
     	
     	return new ResponseEntity<BaseResponse<Integer>>(new BaseResponse<Integer>(200, "CIBIL FOUND",
-    										new Date(),cibil),HttpStatus.OK);
+    										new Date(),e2.getCibil().getCibilScore()),HttpStatus.OK);
     }
     
 	@PostMapping("/sendmailwithattachment")
