@@ -20,7 +20,7 @@ public class Profession {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int professionId;
 	private String professionType;
-
+	private String companyname;
 
 
 }

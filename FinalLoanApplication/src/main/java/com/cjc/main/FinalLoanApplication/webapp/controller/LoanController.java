@@ -163,11 +163,24 @@ public class LoanController {
 		ObjectMapper om=new ObjectMapper();
 		MailDetails mailDetails = om.readValue(maildetailsJson, MailDetails.class);
 		
-		String m = ls.sendmailwithattachment(mailDetails,attachment);
+		MailDetails m = ls.sendmailwithattachment(mailDetails,attachment);
 		
 		
 		return new ResponseEntity<BaseResponse<MailDetails>>(new BaseResponse<MailDetails>(201
-				, "MAIL SEND SUCCESSFULLY", new Date(), null), HttpStatus.OK);
+				, "MAIL SEND SUCCESSFULLY", new Date(), m), HttpStatus.OK);
+	}
+	
+	@PostMapping("/sendadharOtpmail/{adharnumber}")
+	public ResponseEntity<BaseResponse<MailDetails>>adharmail(@RequestBody MailDetails m,
+															  @PathVariable String adharnumber)
+	{
+			
+				MailDetails m2=ls.sendadharMail(m,adharnumber);
+		
+		return new ResponseEntity<BaseResponse<MailDetails>>(new BaseResponse<MailDetails>(201,
+							"MAIL SEND SUCCESSFULLY", new Date(), m2),HttpStatus.CREATED);
+		
+	
 	}
      
 }

@@ -222,7 +222,7 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 
 
 	@Override
-	public String sendmailwithattachment(MailDetails mailDetails, MultipartFile attachment) {
+	public MailDetails sendmailwithattachment(MailDetails mailDetails, MultipartFile attachment) {
 		MimeMessage mm = sender.createMimeMessage();
 		
 		try {
@@ -235,12 +235,37 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 			
 			sender.send(mm);
 			
-			return "mail send";
+			return mailDetails;
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "mail not send";
+			return mailDetails;
 		}
+	}
+
+
+	@Override
+	public MailDetails sendadharMail(MailDetails m,String adharnumber) {
+		
+		if(adharnumber.length()==12)
+		{
+			m.setSubject("ADHAR VERIFICATION OTP");
+			m.setText(String.valueOf(rd.nextInt(9999)));
+			SimpleMailMessage sm=new SimpleMailMessage();
+			sm.setFrom(fromMail);
+			sm.setTo(m.getToMail());
+			sm.setSubject(m.getSubject());
+			sm.setText("Your Adhar OTP is:-"+" "+m.getText());
+			sender.send(sm);
+			return m;
+			
+		}
+		else {
+			//adhar not found exception
+		}
+		
+		
+		return null;
 	}
 
 
