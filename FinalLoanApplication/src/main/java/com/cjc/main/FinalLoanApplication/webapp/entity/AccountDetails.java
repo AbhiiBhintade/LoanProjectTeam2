@@ -21,6 +21,7 @@ public class AccountDetails {
 	private String accounType;
 	private String accountHolderName;
 	private long accountNumber;
+	private String bankname;
 
 
 }

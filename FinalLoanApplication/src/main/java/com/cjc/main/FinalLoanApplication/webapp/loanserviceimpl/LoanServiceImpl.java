@@ -1,6 +1,7 @@
 package com.cjc.main.FinalLoanApplication.webapp.loanserviceimpl;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +20,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cjc.main.FinalLoanApplication.webapp.entity.Cibil;
+import com.cjc.main.FinalLoanApplication.webapp.entity.Customer;
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.MailDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
 import com.cjc.main.FinalLoanApplication.webapp.enums.Cibil_Status;
+import com.cjc.main.FinalLoanApplication.webapp.enums.Currentloanstatus;
 import com.cjc.main.FinalLoanApplication.webapp.enums.Enquiry_Status;
+import com.cjc.main.FinalLoanApplication.webapp.enums.PaymentStatus;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.LoanRepositoryForUsers;
+import com.cjc.main.FinalLoanApplication.webapp.loanRepo.RepoForCustomer;
 import com.cjc.main.FinalLoanApplication.webapp.loanRepo.RepoForEnquiry;
 import com.cjc.main.FinalLoanApplication.webapp.loanservice.LoanService;
 
@@ -36,6 +41,9 @@ public class LoanServiceImpl implements LoanService {
 	
 	@Autowired
 	RepoForEnquiry re;
+	
+	@Autowired
+	RepoForCustomer rc;
 	
 	@Value("${spring.mail.username}")
 	private String fromMail;
@@ -169,7 +177,7 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 				e.setEnquiryStatus(Enquiry_Status.CIBIL_CHECKED.toString());
 				e.getCibil().setCibilScore(ed.getCibil().getCibilScore());;
 				if(e.getCibil().getCibilScore()<650)
-				{
+				{	
 					e.getCibil().setCibilRemark("cibil score is low");
 					e.getCibil().setCibilStatus(Cibil_Status.LOW_CIBIL.toString());
 					e.getCibil().setCibilScoreDateTime(new Date().toString());
@@ -195,19 +203,32 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 			
 		
 			}
-			 if (enquiryStatus.equals("CIBIL_CHECKED")) {
-				if(e.getCibil().getCibilScore()>650)
-				{
-					e.setEnquiryStatus(Enquiry_Status.APPROVED.toString());
-					re.save(e);
-					return e;
-				}else {
-					e.setEnquiryStatus(Enquiry_Status.REJECTED.toString());
-					re.save(e);
-					return e;
-				}
-				
+			if(enquiryStatus.equals("CIBIL_CHECKED"))
+			{
+				e.setEnquiryStatus(Enquiry_Status.CREDIT_STATE.toString());
+				return re.save(e);
 			}
+			else
+			{
+				//exxception
+			}
+			
+			 if(enquiryStatus.equals("CREDIT_STATE"))
+			{
+				 if(e.getCibil().getCibilScore()>650)
+				 {
+					 
+					 e.setEnquiryStatus(Enquiry_Status.APPROVED.toString());
+					 return re.save(e);
+				 }
+				 else {
+					 e.setEnquiryStatus(Enquiry_Status.REJECTED.toString());
+					return re.save(e);
+				 }
+			}
+			
+			
+
 			return null;
 	}
 
@@ -267,6 +288,170 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 		
 		return null;
 	}
+	
+	@Override
+	public Customer addAppForm(Customer c, MultipartFile addressproof, MultipartFile panCard, MultipartFile addharCard,
+			MultipartFile photo, MultipartFile signature, MultipartFile salarySlips) {
+
+		try {
+			c.getAllPersonalDoc().setAddressProof(addressproof.getBytes());
+			c.getAllPersonalDoc().setPanCard(panCard.getBytes());
+			c.getAllPersonalDoc().setAddharCard(addharCard.getBytes());
+			c.getAllPersonalDoc().setPhoto(photo.getBytes());
+			c.getAllPersonalDoc().setSignature(signature.getBytes());
+			c.getAllPersonalDoc().setSalarySlips(salarySlips.getBytes());
+			
+			double customerMobileNumber = c.getCustomerMobileNumber();
+			EnquiryDetails e = re.findByMobileNumber(customerMobileNumber);
+			c.getCibilScore().setCibilScore(e.getCibil().getCibilScore());
+			c.getCibilScore().setCibilScoreDateTime(String.valueOf(new Date()));
+			c.getCibilScore().setCibilStatus(e.getCibil().getCibilStatus());
+			c.getCibilScore().setCibilRemark(e.getCibil().getCibilRemark());
+			c.getCurrentLoanDetails().setCurrentLoanNumber(e.getCaseid());
+			
+			 c.getCurrentLoanDetails().setSanctionDate(String.valueOf(new Date()));
+			
+			 Date d=new Date();
+			 
+			   Calendar cal = Calendar.getInstance();
+		        cal.setTime(d);
+		        cal.add(Calendar.DATE, 30);
+		          Date d2 = cal.getTime();
+			
+			c.getCurrentLoanDetails().getEmiDetails().setNextEmiDueDate(String.valueOf(d2));
+			c.setCustomerstatus(Currentloanstatus.INPROCESS.toString());
+			c.getCurrentLoanDetails().setRemark("OK");
+			
+			c.getCurrentLoanDetails().setStatus(Currentloanstatus.INPROCESS.toString());
+			
+			return rc.save(c);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		return null;
+	}
+	
+	
+
+	
+
+
+
+
+	@Override
+	public List<Customer> getappforms(String status1,String status2) {
+		
+		if(status2.startsWith("no"))
+		{
+			List<Customer> list = rc.findAllByCustomerstatusOrCustomerstatus(status1, status2);
+			
+			return list;
+		}
+		else
+		{
+			List<Customer> list = rc.findAllByCustomerstatusOrCustomerstatus(status1, status2);
+			return list;
+		}
+	}
+
+
+	@Override
+	public Customer updateloanstatus(int customerId,Customer c) {
+
+		Customer c2 = rc.findByCustomerId(customerId);
+		System.out.println(c2);
+		String s = c2.getCustomerstatus();
+		System.out.println(s);
+		
+		if(c2.getCustomerstatus().equals("INPROCESS"))
+		{
+			System.out.println(c2);
+			c2.getCurrentLoanDetails().setStatus(Currentloanstatus.VERIFICATION_STATE.toString());
+			c2.setCustomerstatus(Currentloanstatus.VERIFICATION_STATE.toString());
+			rc.save(c2);
+			return c2;
+		}
+		else if(c2.getCustomerstatus()=="VERIFICATION_STATE")
+		{
+			c2.getCurrentLoanDetails().setStatus(Currentloanstatus.VERIFICATION_DONE.toString());
+			c2.getCustomerverification().setVerificationDate(String.valueOf(new Date()));
+			c2.getCustomerverification().setRemarks("Verified");
+			c2.setCustomerstatus(Currentloanstatus.VERIFICATION_DONE.toString());
+			c2.getCustomerverification().setStatus(Currentloanstatus.VERIFICATION_DONE.toString());
+			rc.save(c2);
+			return c2;
+		}
+		else if(c2.getCustomerstatus()=="VERIFICATION_DONE")
+		{
+			c2.setCustomerstatus(Currentloanstatus.SANCTIONED.toString());
+			c2.getCurrentLoanDetails().setStatus(Currentloanstatus.SANCTIONED.toString());
+			c2.getSanctionLetter().setSanctionDate(String.valueOf(new Date()));
+			c2.getSanctionLetter().setApplicantName(c2.getCustomerName());
+			c2.getSanctionLetter().setContactDetails(c2.getCustomerMobileNumber());
+			c2.getSanctionLetter().setLoanAmtSanctioned(c2.getCurrentLoanDetails().getLoanAmount());
+			c2.getSanctionLetter().setRateOfInterest(c2.getCurrentLoanDetails().getRateOfInterest());
+			c2.getSanctionLetter().setLoanTenure(c2.getCurrentLoanDetails().getTenure());
+			c2.getSanctionLetter().setMonthlyEmiAmount(c2.getCurrentLoanDetails().getEmiDetails().getEmiAmountMonthly());
+			c2.getSanctionLetter().setSanctionStatus(Currentloanstatus.SANCTIONED.toString());
+			c2.getCurrentLoanDetails().setStatus(Currentloanstatus.SANCTIONED.toString());
+			
+			rc.save(c2);
+			return c2;
+		}
+		else if(c2.getCustomerstatus()=="SANCTIONED")
+		{
+			c2.setCustomerstatus(Currentloanstatus.DISBURSED.toString());
+
+			c2.getCurrentLoanDetails().setStatus(Currentloanstatus.DISBURSED.toString());
+			String cn = c2.getCurrentLoanDetails().getCurrentLoanNumber();
+			c2.getLoanDisbursement().setLoanNo(cn);
+			c2.getLoanDisbursement().setAgreementDate(String.valueOf(new Date()));
+			c2.getLoanDisbursement().setTotalAmount(c2.getSanctionLetter().getLoanAmtSanctioned());
+			c2.getLoanDisbursement().setBankName(c2.getAccountDetails().getBankname());
+			c2.getLoanDisbursement().setAccountNumber(c2.getAccountDetails().getAccountNumber());
+			c2.getLoanDisbursement().setTransferAmount(c2.getSanctionLetter().getLoanAmtSanctioned());
+			c2.getLoanDisbursement().setPaymentStatus(PaymentStatus.TRANSFERED.toString());
+			c2.getLoanDisbursement().setAmountPaidDate(String.valueOf(new Date()));
+			
+			//also send mail
+			
+			rc.save(c2);
+			
+			return c2;
+		}
+		else if(c2.getCustomerstatus()=="DISBURSED")
+		{
+			
+
+			c2.getLedger().setLedgerCreatedDate(String.valueOf(new Date()));
+			c2.getLedger().setTotalLoanAmount(c2.getSanctionLetter().getLoanAmtSanctioned());
+			c2.getLedger().setPayableAmountwithInterest(c2.getCurrentLoanDetails().getTotalAmountToBePaidDouble());
+			c2.getLedger().setTenure(c2.getCurrentLoanDetails().getTenure());
+			c2.getLedger().setMonthlyEMI(c2.getCurrentLoanDetails().getEmiDetails().getEmiAmountMonthly());
+			
+			
+	    }
+		
+		return null;
+		
+	}
+
+
+	@Override
+	public EnquiryDetails getsingleEnq(String pancardNumber) {
+
+		EnquiryDetails ed=re.findByPancardNumber(pancardNumber);
+		System.out.println(ed.getPancardNumber());
+		
+		return ed;
+	}
+
+
+	
 
 
 

@@ -10,5 +10,7 @@ public interface RepoForEnquiry extends JpaRepository<EnquiryDetails, Integer> {
 
 	Iterable<EnquiryDetails> findAllByEnquiryStatusOrEnquiryStatus(String enquirystatus1, String enquirystatus2);
 	EnquiryDetails findByEid(int eid);
+	EnquiryDetails findByMobileNumber(double mobileNumber);
+	EnquiryDetails findByPancardNumber(String pancardNumber);
 
 }

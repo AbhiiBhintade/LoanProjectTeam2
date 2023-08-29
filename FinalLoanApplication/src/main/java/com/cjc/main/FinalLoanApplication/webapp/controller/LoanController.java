@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cjc.main.FinalLoanApplication.webapp.entity.BaseResponse;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Cibil;
+import com.cjc.main.FinalLoanApplication.webapp.entity.Customer;
 import com.cjc.main.FinalLoanApplication.webapp.entity.EnquiryDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.MailDetails;
 import com.cjc.main.FinalLoanApplication.webapp.entity.Users;
@@ -48,7 +49,7 @@ public class LoanController {
 	
 	@PostMapping("/adduser")
 	public ResponseEntity<BaseResponse<Users>> adduser(@RequestPart("data") String usersjson,
-			                               @RequestPart("profile") MultipartFile profilephoto) throws JsonMappingException, JsonProcessingException
+			                               			   @RequestPart("profile") MultipartFile profilephoto) throws JsonMappingException, JsonProcessingException
 	{
 		ObjectMapper om=new ObjectMapper();
 		Users u = om.readValue(usersjson, Users.class);
@@ -178,9 +179,64 @@ public class LoanController {
 				MailDetails m2=ls.sendadharMail(m,adharnumber);
 		
 		return new ResponseEntity<BaseResponse<MailDetails>>(new BaseResponse<MailDetails>(201,
-							"MAIL SEND SUCCESSFULLY", new Date(), m2),HttpStatus.CREATED);
+							"APPLICATION FORM SUBMITTED", new Date(), m2),HttpStatus.CREATED);
 		
 	
 	}
+	//for applicationForm
+	@PostMapping("/appform")
+	public ResponseEntity<BaseResponse<Customer>>addAppForm(@RequestPart ("customer") String customerJson,
+											@RequestPart ("addressproof") MultipartFile addressproof,
+											@RequestPart ("panCard") MultipartFile panCard,
+											@RequestPart ("addharCard") MultipartFile addharCard,
+											@RequestPart ("photo") MultipartFile photo,
+									     	@RequestPart ("signature") MultipartFile signature,
+											@RequestPart ("salarySlips") MultipartFile salarySlips) throws JsonMappingException, JsonProcessingException
+	{
+		ObjectMapper om=new ObjectMapper();
+		Customer c = om.readValue(customerJson, Customer.class);
+		
+		 Customer cd=ls.addAppForm(c,addressproof,panCard,addharCard,photo,signature,salarySlips);
+		
+		
+		return new ResponseEntity<BaseResponse<Customer>>(new BaseResponse<Customer>(201,
+				"MAIL SEND SUCCESSFULLY", new Date(), cd),HttpStatus.CREATED);
+	}
+	
+	//getaplication form
+	@GetMapping("/getappForm/{status1}/{status2}")
+	public ResponseEntity<BaseResponse<List<Customer>>>getappforms(@PathVariable String status1,
+			                                                       @PathVariable String status2)
+	{
+		
+		List<Customer>custlist=ls.getappforms(status1, status2);
+		
+
+
+		return new ResponseEntity<BaseResponse<List<Customer>>>(new BaseResponse<List<Customer>>
+		               (200,"FOUND ", new Date(), custlist),HttpStatus.OK);		
+	}
+	
+	//updateLoanStatus
+	@PutMapping("/updateCustometstatus/{customerId}")
+	public ResponseEntity<BaseResponse<Customer>>updateloanstatus(@PathVariable int customerId,
+															      @RequestBody Customer c)
+	{
+		Customer c2=ls.updateloanstatus(customerId,c);
+		
+		return new ResponseEntity<BaseResponse<Customer>>(new BaseResponse<Customer>(200, "UPDATED",
+									new Date(), c2),HttpStatus.OK);
+	}
      
+	
+	@GetMapping("/getsingleEnq/{pancardNumber}")
+	public ResponseEntity<BaseResponse<EnquiryDetails>>getsingleEnq(@PathVariable String pancardNumber)
+	{
+		EnquiryDetails ed=ls.getsingleEnq(pancardNumber);
+		System.out.println(ed.getPancardNumber());
+		
+		return new ResponseEntity<BaseResponse<EnquiryDetails>>(new BaseResponse<EnquiryDetails>(200, 
+				"Enquiry Found", new Date(), ed),HttpStatus.OK);
+	}
+
 }

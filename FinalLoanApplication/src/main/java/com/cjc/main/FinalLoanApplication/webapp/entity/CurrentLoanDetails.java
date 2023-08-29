@@ -23,10 +23,10 @@ public class CurrentLoanDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int currentloanId;
-	private int currentLoanNumber;
+	private String currentLoanNumber;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	private EMIDetails emiDetails;
+	private EMIDetails emiDetails=new EMIDetails();
 	private double loanAmount;
 	private int rateOfInterest;
 	private int tenure;

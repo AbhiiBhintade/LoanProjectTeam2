@@ -28,28 +28,29 @@ public class Customer {
 	private String customerEmail;
 	private double customerMobileNumber;
 	private double customerTotalLoanRequired;
+	private String customerstatus;
 	@OneToOne(cascade = CascadeType.ALL)
-	private AllPersonalDocs allPersonalDoc;
+	private AllPersonalDocs allPersonalDoc=new AllPersonalDocs();
 	@OneToOne(cascade = CascadeType.ALL)
-	private CustomerAddress customerAddress;
+	private CustomerAddress customerAddress=new CustomerAddress();
 	@OneToOne(cascade = CascadeType.ALL)
-	private Profession profession;
+	private Profession profession=new Profession();
 	@OneToOne(cascade = CascadeType.ALL)
-	private Cibil cibilScore;
+	private Cibil2 cibilScore=new Cibil2();
 	@OneToOne(cascade = CascadeType.ALL)
-	private CurrentLoanDetails currentLoanDetails;
+	private CurrentLoanDetails currentLoanDetails=new CurrentLoanDetails();
 	@OneToOne(cascade = CascadeType.ALL)
-	private AccountDetails accountDetails;
+	private AccountDetails accountDetails=new AccountDetails();
 	@OneToOne(cascade = CascadeType.ALL)
-	private GuarantorDetails gurantorDetails;
+	private GuarantorDetails gurantorDetails=new GuarantorDetails();
 	@OneToOne(cascade = CascadeType.ALL)
-	private LoanDisbursement loanDisbursement;
+	private LoanDisbursement loanDisbursement=new LoanDisbursement();
 	@OneToOne(cascade = CascadeType.ALL)
-	private Ledger ledger;
+	private Ledger ledger=new Ledger();
 	@OneToOne(cascade = CascadeType.ALL)
-	private SanctionLetter sanctionLetter;
+	private SanctionLetter sanctionLetter=new SanctionLetter();
 	@OneToOne(cascade = CascadeType.ALL)
-	private CustomerVerification customerverification;
+	private CustomerVerification customerverification=new CustomerVerification();
 
 
 
