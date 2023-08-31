@@ -341,8 +341,10 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 			c.getAllPersonalDoc().setSignature(signature.getBytes());
 			c.getAllPersonalDoc().setSalarySlips(salarySlips.getBytes());
 			
+			double mb = c.getCustomerMobileNumber();
 			
-			EnquiryDetails e = re.findByMobileNumber(c.getCustomerMobileNumber());
+			EnquiryDetails e = re.findByMobileNumber(mb);
+			
 			
 			
 			c.getCibilScore().setCibilScore(e.getCibil().getCibilScore());
@@ -408,7 +410,7 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 	          
 	          
 	          
-	          com.lowagie.text.Font font =FontFactory.getFont(FontFactory.TIMES_BOLD,13);
+	          Font font =FontFactory.getFont(FontFactory.TIMES_BOLD,13);
 	          Paragraph pdfdate=new Paragraph(date,font);
 	          pdfdate.setSpacingBefore(25);
 	          document.add(pdfdate);
@@ -466,7 +468,7 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 	                          
 	                          mobile_number.setPhrase(new Phrase("Mobile Number",font));
 	                              table.addCell(mobile_number);
-	                              mobile_number.setPhrase(new Phrase(String.valueOf(c.getCustomerMobileNumber())));
+	                              mobile_number.setPhrase(new Phrase(""+(c.getCustomerMobileNumber())));
 	                              table.addCell(mobile_number);
 	                              
 	                              PdfPCell cyststatus=new PdfPCell();
@@ -529,7 +531,7 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 	                                              
 	                 cust_cibilscore.setPhrase(new Phrase("Customer Cibil Score",font));
 	                          table.addCell(cust_cibilscore);
-	                          cust_cibilscore.setPhrase(new Phrase(c.getCibilScore().getCibilScore()));
+	                          cust_cibilscore.setPhrase(new Phrase(""+c.getCibilScore().getCibilScore()));
 	                          table.addCell(cust_cibilscore); 
 	                          
 	                PdfPCell loan_amount=new PdfPCell();
@@ -599,7 +601,9 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 	          
 	          document.close();
 	          
-//	          c.setApplicationpdf(document);
+	          
+	          
+	          c.setApplicationpdf(out.toByteArray());
 	          
 	          
 	          
@@ -760,18 +764,16 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 	}
 
 
-//	@Override
-//	public ByteArrayInputStream getpdf(int customerId) {
-//		
-//		Customer cust = rc.findByCustomerId(customerId);
-////		Document applicationpdf = Document(cust.getApplicationpdf());
-//		
-//		  ByteArrayOutputStream out=new ByteArrayOutputStream();
-//          
-//          PdfWriter.getInstance(applicationpdf, out);
-//
-//		return new ByteArrayInputStream(out.toByteArray());
-//	}
+	@Override
+	public ByteArrayInputStream getpdf(int customerId) {
+		
+		Customer cust = rc.findByCustomerId(customerId);
+		 byte[] applicationpdf = cust.getApplicationpdf();
+		
+		 
+
+		return new ByteArrayInputStream(applicationpdf);
+	}
 
 
 	

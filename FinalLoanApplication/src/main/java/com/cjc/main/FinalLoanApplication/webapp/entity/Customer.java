@@ -31,7 +31,7 @@ public class Customer {
 	private double customerMobileNumber;
 	private double customerTotalLoanRequired;
 	private String customerstatus;
-//	private Byte[] applicationpdf;
+	private byte[] applicationpdf;
 	@OneToOne(cascade = CascadeType.ALL)
 	private AllPersonalDocs allPersonalDoc=new AllPersonalDocs();
 	@OneToOne(cascade = CascadeType.ALL)

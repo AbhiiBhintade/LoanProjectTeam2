@@ -242,20 +242,20 @@ public class LoanController {
 				"Enquiry Found", new Date(), ed),HttpStatus.OK);
 	}
 
-//	@GetMapping("/getPdf/{customerId}")
-//	public ResponseEntity<InputStreamResource> genratePdf(@PathVariable int customerId) {
-//		
-//		ByteArrayInputStream pdfData = ls.getpdf(customerId);
-//		HttpHeaders headers= new HttpHeaders();
-//		                     // key           // value 
-//		   headers.add("Content-Disposition", "inline; filename=abc.pdf");
-//		       
-//		   
-//
-//		return ResponseEntity.ok()
-//				              .headers(headers)
-//				              .contentType(MediaType.APPLICATION_PDF)
-//				              .body(new InputStreamResource(pdfData));
-//	
-//	}
+	@GetMapping("/getPdf/{customerId}")
+	public ResponseEntity<InputStreamResource> genratePdf(@PathVariable int customerId) {
+		
+		ByteArrayInputStream pdfData = ls.getpdf(customerId);
+		HttpHeaders headers= new HttpHeaders();
+		                     // key           // value 
+		   headers.add("Content-Disposition", "inline; filename=abc.pdf");
+		       
+		   
+
+		return ResponseEntity.ok()
+				              .headers(headers)
+				              .contentType(MediaType.APPLICATION_PDF)
+				              .body(new InputStreamResource(pdfData));
+	
+	}
 }

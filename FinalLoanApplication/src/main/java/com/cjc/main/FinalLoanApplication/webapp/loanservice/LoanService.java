@@ -43,7 +43,7 @@ public interface LoanService {
 
 	EnquiryDetails getsingleEnq(String pancardNumber);
 
-//	ByteArrayInputStream getpdf(int customerId);
+	ByteArrayInputStream getpdf(int customerId);
 
 
 
