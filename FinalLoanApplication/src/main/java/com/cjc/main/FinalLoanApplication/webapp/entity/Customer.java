@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +31,7 @@ public class Customer {
 	private double customerMobileNumber;
 	private double customerTotalLoanRequired;
 	private String customerstatus;
+//	private Byte[] applicationpdf;
 	@OneToOne(cascade = CascadeType.ALL)
 	private AllPersonalDocs allPersonalDoc=new AllPersonalDocs();
 	@OneToOne(cascade = CascadeType.ALL)
@@ -55,3 +58,42 @@ public class Customer {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+

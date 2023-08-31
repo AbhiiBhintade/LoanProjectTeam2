@@ -1,5 +1,7 @@
 package com.cjc.main.FinalLoanApplication.webapp;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Random;
 
 import org.springframework.boot.SpringApplication;
@@ -12,6 +14,8 @@ public class FinalLoanApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FinalLoanApplication.class, args);
+		
+	
 	
 	}
 	@Bean
@@ -26,5 +30,7 @@ public class FinalLoanApplication {
 		RestTemplate rt=new RestTemplate();
 		return rt;
 	}
+	
+	
 
 }

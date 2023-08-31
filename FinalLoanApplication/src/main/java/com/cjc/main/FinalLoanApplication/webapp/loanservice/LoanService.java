@@ -1,5 +1,6 @@
 package com.cjc.main.FinalLoanApplication.webapp.loanservice;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +42,8 @@ public interface LoanService {
 			MultipartFile photo, MultipartFile signature, MultipartFile salarySlips);
 
 	EnquiryDetails getsingleEnq(String pancardNumber);
+
+//	ByteArrayInputStream getpdf(int customerId);
 
 
 

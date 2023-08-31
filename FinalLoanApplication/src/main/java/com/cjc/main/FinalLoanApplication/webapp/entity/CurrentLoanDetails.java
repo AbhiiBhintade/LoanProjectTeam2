@@ -29,6 +29,7 @@ public class CurrentLoanDetails {
 	private EMIDetails emiDetails=new EMIDetails();
 	private double loanAmount;
 	private int rateOfInterest;
+	private double emiAmountMonthly;
 	private int tenure;
 	private double totalAmountToBePaidDouble;
 	private int processingFees;
