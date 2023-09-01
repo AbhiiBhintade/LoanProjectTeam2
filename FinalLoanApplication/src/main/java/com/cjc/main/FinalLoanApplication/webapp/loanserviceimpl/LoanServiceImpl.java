@@ -341,6 +341,76 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 			c.getAllPersonalDoc().setSignature(signature.getBytes());
 			c.getAllPersonalDoc().setSalarySlips(salarySlips.getBytes());
 			
+			 double amount=c.getCurrentLoanDetails().getLoanAmount();
+			 
+			 int tenure1 = c.getCurrentLoanDetails().getTenure();
+			 
+			  int interest=0;
+
+			  double totalinterestonamt=0;
+			  double finalamt;
+
+			  int oneyearint;
+
+			  int onemonthint;
+
+			  double emi1 = 0;
+
+			  int processingFees=500;
+
+			  double totalamountpayable=0;
+			
+			  if(tenure1==12)
+			    {
+			     
+			      interest=5;
+			      totalinterestonamt=amount*interest/100;
+			      finalamt=amount+totalinterestonamt;
+			      System.out.println(totalinterestonamt);
+			      emi1=finalamt/tenure1;
+			      totalamountpayable=emi1*tenure1;
+			      System.out.println(totalamountpayable);
+			    }
+			    else if(tenure1==24)
+			    {
+			    	 interest=7;
+				      oneyearint=(int)(amount*interest/100);
+				      onemonthint=oneyearint/12;
+				      totalinterestonamt=onemonthint*tenure1;
+				     
+				      finalamt=amount+totalinterestonamt;
+				      emi1=finalamt/tenure1;
+				      totalamountpayable=emi1*tenure1;
+			    }
+			    else if(tenure1==36)
+			    {
+			    	 interest=9;
+				      oneyearint=(int)(amount*interest/100);
+				      onemonthint=oneyearint/12;
+				      totalinterestonamt=onemonthint*tenure1;
+				      finalamt=amount+totalinterestonamt;
+				      emi1=finalamt/tenure1;
+				      totalamountpayable=emi1*tenure1;
+			    }
+			    else if(tenure1==48)
+			    {
+			    	 interest=11;
+				      oneyearint=(int)(amount*interest/100);
+				      onemonthint=oneyearint/12;
+				      totalinterestonamt=onemonthint*tenure1;
+				     
+				      finalamt=amount+totalinterestonamt;
+				      emi1=finalamt/tenure1;
+				      totalamountpayable=emi1*tenure1;
+				     
+			    }
+			  
+			  c.getCurrentLoanDetails().setProcessingFees(processingFees);
+			  c.getCurrentLoanDetails().setRateOfInterest(interest);
+			  c.getCurrentLoanDetails().setTotalAmountToBePaidDouble(totalamountpayable);
+			  c.getCurrentLoanDetails().setTotalInterest(totalinterestonamt);
+			  c.getCurrentLoanDetails().setEmiAmountMonthly(emi1);
+			
 			double mb = c.getCustomerMobileNumber();
 			
 			EnquiryDetails e = re.findByMobileNumber(mb);
