@@ -385,15 +385,7 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 	              
 	          document.open();
 	          
-	          
-	          
-	          
-	          
-	          
-	          
-	          
-	          
-	          
+	    
 	          
 	          Font titleFont= FontFactory.getFont(FontFactory.COURIER_BOLD,25);
 	           titleFont.setColor(CMYKColor.RED);
@@ -402,11 +394,6 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 	          titlePara.setAlignment(Element.ALIGN_CENTER);
 	          
 	          document.add(titlePara);
-	          
-	          
-	          
-	          
-	          
 	          
 	          
 	          
@@ -718,9 +705,12 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 			c2.getLedger().setPayableAmountwithInterest(c2.getCurrentLoanDetails().getTotalAmountToBePaidDouble());
 			c2.getLedger().setTenure(c2.getCurrentLoanDetails().getTenure());
 			c2.getLedger().setMonthlyEMI(c2.getCurrentLoanDetails().getEmiDetails().getEmiAmountMonthly());
+			c2.getLedger().setRemainingAmount(c2.getCurrentLoanDetails().getTotalAmountToBePaidDouble());
+			
 			
 			int tenure = c2.getCurrentLoanDetails().getTenure();
 			double emi = c2.getCurrentLoanDetails().getEmiAmountMonthly();
+			c2.setCustomerstatus(Currentloanstatus.LEDGER.toString());
 			 Date d=new Date();
 			 
 			 Set<InstallmentsDetails>install=new HashSet<>();
@@ -736,15 +726,29 @@ Iterable<EnquiryDetails> all = re.findAllByEnquiryStatusOrEnquiryStatus(enquirys
 			        cal.setTime(d);
 			        cal.add(Calendar.DATE, 30);
 			          Date d2 = cal.getTime();
+			          if(i==1)
+			          {
+			        	  c2.getLedger().setNextEmiDatestart(String.valueOf(d2));
+			        	  c2.getLedger().setNextEmiDateEnd(String.valueOf(d2));
+			          }
+			          else if (i==tenure) 
+			          {
+						c2.getLedger().setLoanEndDate(String.valueOf(d2));
+					  }
+			          {
+			        	  
+			          }
 			          d=d2;
 			          
 				
 				installment.setInstallmentsDate(d2.toString());
+				
 
 			install.add(installment);
 				
 			}
 			c2.getLedger().setInstallmentsDetails(install);
+			c2.getLedger().setLoanStatus(c2.getCustomerstatus());
 			rc.save(c2);
 			return c2;
 	    }
